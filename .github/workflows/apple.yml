@@ -107,13 +107,13 @@ jobs:
         with:
           node-version-file: ".nvmrc"
 
-      # - name: Cache node_modules
-      #   id: cache-node-modules
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: node_modules
-      #     key: ${{ matrix.platform }}-cache-node-modules-${{ hashFiles('yarn.lock') }}
-      #     lookup-only: true
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ matrix.platform }}-cache-node-modules-${{ hashFiles('yarn.lock') }}
+          lookup-only: true
 
       - name: Unlock ssh agent
         uses: webfactory/ssh-agent@v0.9.0
@@ -121,7 +121,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_SDK_CORE_CLIENT }}
 
       - name: Run yarn install
-        # if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         uses: borales/actions-yarn@v5
         with:
           cmd: install --network-concurrency 1
@@ -201,27 +201,27 @@ jobs:
           path: node_modules
           key: ${{ matrix.platform }}-cache-node-modules-${{ hashFiles('yarn.lock') }}
 
-      # - name: Cache Pods
-      #   if: matrix.platform == 'IOS'
-      #   id: cache-pods
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: |
-      #       ios/Pods
-      #       ios/Podfile.lock
-      #     key: cache-pods-${{ hashFiles('yarn.lock') }}
+      - name: Cache Pods
+        if: matrix.platform == 'IOS'
+        id: cache-pods
+        uses: actions/cache@v4
+        with:
+          path: |
+            ios/Pods
+            ios/Podfile.lock
+          key: cache-pods-${{ hashFiles('yarn.lock') }}
 
       - name: Pod install
-        # if: ${{ (matrix.platform == 'IOS') && (steps.cache-pods.outputs.cache-hit != 'true') }}
+        if: ${{ (matrix.platform == 'IOS') && (steps.cache-pods.outputs.cache-hit != 'true') }}
         working-directory: ios
         run: pod install
 
-      # - name: Cache Xcode build
-      #   uses: irgaly/xcode-cache@v1
-      #   if: matrix.platform == 'IOS'
-      #   with:
-      #     key: xcode-cache-deriveddata-${{ needs.init.outputs.env }}-${{ hashFiles('yarn.lock') }}
-      #     restore-keys: xcode-cache-deriveddata-${{ needs.init.outputs.env }}-
+      - name: Cache Xcode build
+        uses: irgaly/xcode-cache@v1
+        if: matrix.platform == 'IOS'
+        with:
+          key: xcode-cache-deriveddata-${{ needs.init.outputs.env }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: xcode-cache-deriveddata-${{ needs.init.outputs.env }}-
 
       # NOTE: load environment and file
       - name: Load secret files
