@@ -79,7 +79,7 @@ jobs:
         uses: PacificPromise/macos-telegram-action@main
         with:
           type: topic
-          message: "🎬 -  Start build: ${{ steps.get-message-information.outputs.value }}"
+          message: '🎬 -  Start build: ${{ steps.get-message-information.outputs.value }}'
 
   prepare:
     name: Prepare ${{ matrix.platform  }}
@@ -89,10 +89,10 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          - name: "macos-14"
-            platform: "IOS"
-          - name: "ubuntu-22.04"
-            platform: "ANDROID"
+          - name: 'macos-14'
+            platform: 'IOS'
+          - name: 'ubuntu-22.04'
+            platform: 'ANDROID'
     runs-on: ${{ matrix.name }}
     steps:
       - name: Checkout
@@ -105,14 +105,14 @@ jobs:
       - name: Setup Node v18
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: '.nvmrc'
 
       - name: Cache node_modules
         id: cache-node-modules
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ matrix.platform }}-cache-node-modules-${{ hashFiles('yarn.lock') }}
+          key: ${{ matrix.platform }}-cache-node-modules-v2-${{ hashFiles('yarn.lock') }}
           lookup-only: true
 
       - name: Unlock ssh agent
@@ -131,7 +131,7 @@ jobs:
         uses: PacificPromise/macos-telegram-action@main
         with:
           type: topic
-          message: "💥 - Failure ${{ matrix.platform }}: ${{ needs.init.outputs.message-information }}"
+          message: '💥 - Failure ${{ matrix.platform }}: ${{ needs.init.outputs.message-information }}'
 
   deploy:
     name: Deployment ${{ matrix.format }}
@@ -152,24 +152,24 @@ jobs:
           ref: ${{ github.event.client_payload.ref_name}}
 
       # NOTE: setup environment
-      - name: Setup ruby 3.2.2
+      - name: Setup ruby 3.0.0p0
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2.2"
-          bundler-cache: true
+          ruby-version: '3.0.0p0'
+          # bundler-cache: true
 
       - name: Setup Node v18
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: '.nvmrc'
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         if: matrix.platform == 'ANDROID'
         with:
-          java-version: "17"
-          distribution: "temurin"
-          cache: "gradle"
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
 
       - name: Setup Android SDK
         if: matrix.platform == 'ANDROID'
@@ -246,12 +246,15 @@ jobs:
         if: matrix.platform == 'IOS'
         run: ln -s $(command -v node) /usr/local/bin/node
 
+      - name: Set permissions for hermes-engine
+        run: sudo chmod -R 777 node_modules/hermes-engine
+
       # NOTE: start build
       - name: Build IPA
         if: matrix.format == 'IPA'
         uses: maierj/fastlane-action@v3.1.0
         with:
-          lane: "ios ipa"
+          lane: 'ios ipa'
 
       - name: Build APK
         if: matrix.format == 'APK'
@@ -289,14 +292,14 @@ jobs:
         uses: PacificPromise/macos-telegram-action@main
         with:
           type: topic
-          message: "✅ - Success ${{ matrix.format }}: ${{ needs.init.outputs.message-information }}"
+          message: '✅ - Success ${{ matrix.format }}: ${{ needs.init.outputs.message-information }}'
 
       - name: Send telegram message failure
         if: ${{ failure() && vars.IS_SILENT != 'true' }}
         uses: PacificPromise/macos-telegram-action@main
         with:
           type: topic
-          message: "💥 - Failure ${{ matrix.format }}: ${{ needs.init.outputs.message-information }}"
+          message: '💥 - Failure ${{ matrix.format }}: ${{ needs.init.outputs.message-information }}'
 
   after-deploy:
     needs: [deploy]
@@ -314,7 +317,7 @@ jobs:
         uses: dkershner6/switch-case-action@v1
         id: get-environment
         with:
-          default: "debug"
+          default: 'debug'
           conditionals-with-values: |
             ${{ contains(github.event.client_payload.ref_name, 'prd') }} => production
             ${{ contains(github.event.client_payload.ref_name, 'stg') }} => staging
