@@ -199,7 +199,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ matrix.platform }}-cache-node-modules-${{ hashFiles('yarn.lock') }}
+          key: ${{ matrix.platform }}-cache-node-modules-v2-${{ hashFiles('yarn.lock') }}
 
       - name: Cache Pods
         if: matrix.platform == 'IOS'
@@ -209,7 +209,7 @@ jobs:
           path: |
             ios/Pods
             ios/Podfile.lock
-          key: cache-pods-${{ hashFiles('yarn.lock') }}
+          key: cache-pods-v2-${{ hashFiles('yarn.lock') }}
 
       - name: Pod install
         if: ${{ (matrix.platform == 'IOS') && (steps.cache-pods.outputs.cache-hit != 'true') }}
