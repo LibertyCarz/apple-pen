@@ -152,10 +152,10 @@ jobs:
           ref: ${{ github.event.client_payload.ref_name}}
 
       # NOTE: setup environment
-      - name: Setup ruby 3.0.0p0
+      - name: Setup ruby 3.0.0
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0.0p0'
+          ruby-version: '3.0.0'
           # bundler-cache: true
 
       - name: Setup Node v18
