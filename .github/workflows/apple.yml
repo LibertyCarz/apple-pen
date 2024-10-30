@@ -255,9 +255,6 @@ jobs:
       - name: Set permissions for node_modules
         run: sudo chmod -R 777 node_modules
 
-      - name: Set permissions for Xcode
-        run: sudo chmod -R 777 ~/Library/Developer/Xcode/DerivedData
-
       # NOTE: start build
       - name: Build IPA
         if: matrix.format == 'IPA'
