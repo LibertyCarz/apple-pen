@@ -183,8 +183,9 @@ jobs:
 
       - name: Setup cocoapods
         if: matrix.platform == 'IOS'
-        run: |
-          gem install cocoapods -v 1.15.2
+        uses: maxim-lobanov/setup-cocoapods@v1
+        with:
+          version: 1.15.2
 
       - name: Select Xcode
         if: matrix.platform == 'IOS'
