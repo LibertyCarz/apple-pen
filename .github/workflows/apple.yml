@@ -27,7 +27,7 @@ env:
 jobs:
   init:
     name: Init
-    runs-on: macos-14
+    runs-on: macos-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.value }}
       message-information: ${{ steps.get-message-information.outputs.value }}
@@ -43,9 +43,9 @@ jobs:
       - name: Set matrix
         id: set-matrix
         run: |
-          MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
+          MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-latest\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
           if [[ "$REF_NAME" =~ "prd" ]]; then
-            MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"},{\"format\":\"AAB\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
+            MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-latest\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"},{\"format\":\"AAB\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
           fi
           echo "value=$MATRIX" >> $GITHUB_OUTPUT
 
@@ -89,7 +89,7 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          - name: 'macos-14'
+          - name: 'macos-latest'
             platform: 'IOS'
           - name: 'ubuntu-22.04'
             platform: 'ANDROID'
@@ -152,10 +152,10 @@ jobs:
           ref: ${{ github.event.client_payload.ref_name}}
 
       # NOTE: setup environment
-      - name: Setup ruby 3.2.2
+      - name: Setup ruby 2.6.10
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2.2'
+          ruby-version: '2.6.10'
           bundler-cache: true
 
       - name: Setup Node v18
