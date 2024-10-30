@@ -152,10 +152,10 @@ jobs:
           ref: ${{ github.event.client_payload.ref_name}}
 
       # NOTE: setup environment
-      - name: Setup ruby 2.6.10
+      - name: Setup ruby 2.7.0
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.6.10'
+          ruby-version: '2.7.0'
           bundler-cache: true
 
       - name: Setup Node v18
@@ -183,9 +183,8 @@ jobs:
 
       - name: Setup cocoapods
         if: matrix.platform == 'IOS'
-        uses: maxim-lobanov/setup-cocoapods@v1
-        with:
-          version: 1.14.3
+        run: |
+          gem install cocoapods -v 1.15.2
 
       - name: Select Xcode
         if: matrix.platform == 'IOS'
