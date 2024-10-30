@@ -252,8 +252,11 @@ jobs:
         if: matrix.platform == 'IOS'
         run: ln -s $(command -v node) /usr/local/bin/node
 
-      - name: Set permissions for hermes-engine
-        run: sudo chmod -R 777 node_modules/hermes-engine
+      - name: Set permissions for node_modules
+        run: sudo chmod -R 777 node_modules
+
+      - name: Set permissions for Xcode
+        run: sudo chmod -R 777 ~/Library/Developer/Xcode/DerivedData
 
       # NOTE: start build
       - name: Build IPA
