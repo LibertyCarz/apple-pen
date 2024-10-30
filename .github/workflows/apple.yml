@@ -27,7 +27,7 @@ env:
 jobs:
   init:
     name: Init
-    runs-on: macos-latest
+    runs-on: macos-14
     outputs:
       matrix: ${{ steps.set-matrix.outputs.value }}
       message-information: ${{ steps.get-message-information.outputs.value }}
@@ -43,9 +43,9 @@ jobs:
       - name: Set matrix
         id: set-matrix
         run: |
-          MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-latest\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
+          MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
           if [[ "$REF_NAME" =~ "prd" ]]; then
-            MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-latest\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"},{\"format\":\"AAB\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
+            MATRIX="[{\"format\":\"IPA\",\"name\":\"macos-14\",\"platform\":\"IOS\"},{\"format\":\"APK\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"},{\"format\":\"AAB\",\"name\":\"ubuntu-22.04\",\"platform\":\"ANDROID\"}]"
           fi
           echo "value=$MATRIX" >> $GITHUB_OUTPUT
 
@@ -185,7 +185,7 @@ jobs:
         if: matrix.platform == 'IOS'
         uses: maxim-lobanov/setup-cocoapods@v1
         with:
-          version: 1.16.1
+          version: 1.14.3
 
       - name: Select Xcode
         if: matrix.platform == 'IOS'
