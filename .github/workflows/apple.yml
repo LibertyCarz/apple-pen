@@ -238,6 +238,12 @@ jobs:
         with:
           cmd: appicon:create
 
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: ios/.xcode.env.local
+        continue-on-error: true
+
       - name: Install certificate and provision
         if: matrix.platform == 'IOS'
         run: bash .github/scripts/install_cert_and_provision.sh
